@@ -18,27 +18,14 @@ impl Automaton {
             conditions: vec![]
         }
     }
-    #[allow(dead_code)]
-    pub fn display(&self) {
-        for i in 0..self.grid.height {
-            for j in 0..self.grid.width {
-                let a = match self.grid.return_at_pos(j, i) {
-                    Live => '#',
-                    Dead => ' '
-                };
-                print!("{}", a);
-            }
-            println!();
-        }
-    }
 
-    pub fn add_condition(&mut self, amount_to_switch: usize, condition_state: State, initial_state: State, result_state: State) {
+    pub fn add_condition(&mut self, amount_to_switch: isize, condition_state: State, initial_state: State, result_state: State) {
         self.conditions.push(Condition::new(amount_to_switch, initial_state, result_state, condition_state));
     }
 
     pub fn add_condition_range(&mut self, from: usize, until: usize, condition_state: State, initial_state: State, result_state: State) {
         for i in from..=until {
-            self.add_condition(i, condition_state, initial_state, result_state);
+            self.add_condition(i as isize, condition_state, initial_state, result_state);
         }
     }
 
@@ -58,7 +45,9 @@ impl Automaton {
                         y: i, x: j
                     };
 
-                    if neighbourhood(&self.grid, &condition.condition_state, &coordinate) == condition.amount_to_switch {
+                    if condition.amount_to_switch != -1 && neighbourhood(&self.grid, &condition.condition_state, &coordinate) == condition.amount_to_switch as usize{
+                        updated_grid.set_at_pos(j, i, &condition.result_state);
+                    } else if condition.amount_to_switch == -1 {
                         updated_grid.set_at_pos(j, i, &condition.result_state);
                     }
                 }
@@ -76,8 +65,9 @@ impl Automaton {
             for y in 0..self.grid.height / scale {
                 let state = self.grid.return_at_pos(x, y);
                 let color = match state {
-                  Live => Rgb([255, 0, 0]),
-                  Dead => Rgb([0, 0, 0])
+                    Live => Rgb([0, 0, 255]),
+                    Dead => Rgb([0, 0, 0]),
+                    State::Dying => Rgb([255, 255, 255])
                 };
 
                 for i in 0..scale {
