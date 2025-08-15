@@ -3,7 +3,7 @@ use crate::condition::Condition;
 use crate::grid::Grid;
 use crate::neighbours::{Coordinate};
 use crate::State;
-use crate::State::{Dead, Live};
+use crate::State::{Dead, Live, Dying};
 
 
 pub struct Automaton{
@@ -69,9 +69,9 @@ impl Automaton {
             for y in 0..self.grid.height {
                 let state = self.grid.return_at_pos(x, y);
                 let color = match state {
-                    Live => Rgb([100, 100, 255]),
-                    Dead => Rgb([255, 255, 255]),
-                    State::Dying => Rgb([255, 255, 255])
+                    Live => Rgb([15, 255, 0]),
+                    Dead => Rgb([0, 0, 0]),
+                    Dying => Rgb([255, 255, 255])
                 };
 
                 for i in 0..self.scale {

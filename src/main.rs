@@ -16,8 +16,8 @@ pub enum State {
 }
 
 fn main() {
-    let (width, height) = (1280, 720);
-    let scale = 4;
+    let (width, height) = (3840 , 2160 );
+    let scale = 8;
     let mut automaton: Automaton = Automaton::new(height, width, scale);
 
     // Conway's Game of Life
@@ -48,7 +48,7 @@ fn main() {
 
     automaton.grid.randomize();
     let mut counter = 0;
-    let limit = 14400;
+    let limit = 1440;
     let start_time = Instant::now();
     loop {
         if counter >= limit {
