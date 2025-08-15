@@ -17,7 +17,8 @@ pub enum State {
 
 fn main() {
     let (width, height) = (1280, 720);
-    let mut automaton: Automaton = Automaton::new(height, width);
+    let scale = 4;
+    let mut automaton: Automaton = Automaton::new(height, width, scale);
 
     // Conway's Game of Life
     automaton.add_condition(0, Live, Live, Dead);
@@ -38,7 +39,6 @@ fn main() {
     // automaton.add_condition(7, Live, Live, Live);
     // automaton.add_condition(8, Live, Live, Live);
 
-    //
     // automaton.add_condition(-1, Live, Live, Dying);
     // automaton.add_condition(2, Live, Dead, Live);
     // automaton.add_condition(0, Live, Dead, Dead);
@@ -48,7 +48,7 @@ fn main() {
 
     automaton.grid.randomize();
     let mut counter = 0;
-    let limit = 1000;
+    let limit = 14400;
     let start_time = Instant::now();
     loop {
         if counter >= limit {
@@ -57,7 +57,7 @@ fn main() {
         counter += 1;
         automaton.update(moore);
         println!("{}/{}", counter, limit);
-        automaton.produce_image(4, format!("./images/{}.png", counter).as_str() ).expect("Failed drawing");
+        automaton.produce_image(format!("./images/{}.png", counter).as_str() ).expect("Failed drawing");
     }
     let duration = start_time.elapsed();
     println!("Time taken: {:?}", duration);
